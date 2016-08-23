@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\usepackage[margin=0.8in]{geometry}
+\usepackage[margin=1.25in]{geometry}
 \usepackage{listings}
 \usepackage{enumerate}
 \usepackage{amsmath}
@@ -10,11 +10,30 @@
 
 % \usetikzlibrary{arrows,backgrounds,calc,trees,hobby}
 
+\lstdefinestyle{mystyle}{                                                       
+    backgroundcolor=\color{backcolour},                                         
+    commentstyle=\color{codegreen},                                             
+    keywordstyle=\color{magenta},                                               
+    numberstyle=\tiny\color{codegray},                                          
+    stringstyle=\color{codepurple},                                             
+    basicstyle=\footnotesize,                                                   
+    breakatwhitespace=false,                                                    
+    breaklines=true,                                                            
+    captionpos=b,                                                               
+    keepspaces=true,                                                            
+    numbers=left,                                                               
+    numbersep=5pt,                                                              
+    showspaces=false,                                                           
+    showstringspaces=false,                                                     
+    showtabs=false,                                                             
+    tabsize=2                                                                   
+}
+
 \title{Untitled}
 \author{Jonathan Garcia-Mallen}
 \date{??? August 2016}
 \begin{document}
-\lstset{language=Python,
+\lstset{language=Bash,
   numbers=left,
   stepnumber=3,    
   firstnumber=1,
@@ -23,68 +42,83 @@
 \maketitle
 \tableofcontents
 \section{Background } 
-\subsection{This is Duckietown}
-\textbf{COPYPASTED FROM DUCKIETOWN.MIT.EDU}\\
-""""\\
-Duckietown is a class on advanced autonomy taught at MIT
-For Spring 2016, MIT has a new class about the science of autonomy at the graduate level. This is a hands-on, project-focused course focusing on self-driving vehicles and high-level autonomy. The problem: **Design the Autonomous Robo-Taxis System for the City of Duckietown.**
-
-    This is a class for makers \&\& thinkers
-    This is a collaborative effort: 2 Labs (CSAIL and LIDS), 3 Departments (ME, AeroAstro, EECS), and over a dozen people helped created this class, under the supervision of Prof. John Leonard and Prof. Jon How.
-    Duckietown UROP opportunities
-    Staff
-    Cool videos
+Duckietown (2.166) is a graduate class on advanced autonomy taught at MIT, first taught in Spring 2016. It is a hands-on, project-focused course focusing on self-driving vehicles and high-level autonomy. Its students work to solve the underlying problem of designing the Autonomous Robo-Taxis System for the (fictional) City of Duckietown. Its students are diverse, coming from multiple departments with different backgrounds. 
 \\
-Duckietown is a reproducible, open-source class
+With this diversity in mind, the first week \textit{\textbf{or two}} is dedicated to bringing everyone on the same page, and doling out the robo-taxis to be programmed: Duckiebots. A Raspberry Pi 2 is at the center of these machines \textit{(cite duck site)}. To program them, students learn to log in remotely from their laptops to the robot's Pi and launch programs the same way, or by sending a command directly from their laptops without logging into their robot. The students had no way of running a program on their duckiebots without using their laptops.
+\\
+Picture this scenario. A grad student is testing some new autonomy on their laptop. Their reseach advisor \textit{(is this the right word?)} happens to walk by on her way to a meeting and asks him ``how's your duckiebot doing?'' The student rushes to power on his robot taxi (named batmobile), wait for it to connect to the network, and rushes the following incantation into his laptop's terminal: \textit{(change 'dat-grad-student' to 'you'?)}
 
-    This is an open-source class: all materials (hardware design, software, and teaching materials) will be released as "open source" (a free software license for code; a Creative Commons license for teaching materials)
-    News and updates
-    Follow us on Facebook: facebook.com/duckietown.
-    Contacts: Please contact us at duckietown@mit.edu with any question.
-""""\\
+% ah thank ye Jesus for waking me up at 0614 here in NH,
+% letting me exercises, bathe go to morning prayer, pray a little more, and then making time for me to write her. Te lo agradezco, sinceramente. 
+\begin{lstlisting}
+dat-grad-student@duckietop4:~$ ssh batmobile
+ssh: Could not resolve hostname batmobile.local: Name or service not known
+dat-grad-student@duckietop4:~$ ping batmobile.local
+ping: unknown host batmobile.local
+dat-grad-student@duckietop4:~$ ping batmobile.local
+PING batmobile.local (18.314.159.265)
+64 bytes from localhost (18.314.159.265): icmp_seq=1 ttl=64 time=396.039 ms
+64 bytes from localhost (18.314.159.265): icmp_seq=2 ttl=64 time=F I X   T H E S E   N U M B E R S
+^C
+--- localhost ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 2999ms
+rtt min/avg/max/mdev = 0.022/0.029/0.039/0.008 ms
+dat-grad-student@duckietop4:~$ ssh batmobile
+.
+.
+.
+# F I L L   T H E   R E S T   O F   T H I S
+ubuntu@batmobile:~$ roslaunch duckietown dat-grad-students-demo.launch veh:=batmobile
+\end{lstlisting}
+\begin{lstlisting}
+or he does the other thing where he still has to ssh in but still sees all the above errors that come up whenever you're not thinking straight, running commands you're just getting familiar with. 
 
+you know, the remote roslaunch
+dad-grad-student@duckietop4:~$ roslaunch duckietown dat-grad-students-demo.launch veh:=batmobile
+\end{lstlisting}
 
-- this is duckietown (copy from website)
-- problem, and why you should care:
-    - The students have to ssh into their duckiebots every time they want to 
-      test or show off their code.
-        - show in excruciating detail what has to be done in order to run a 
-        program on the bot, both remote and ssh'ing methods.
-    - Problems: it's annoying.  Audience may not understand that the code is
-      running entirely on the duckiebot, and not on the laptop. wifi isn't 
-      reliable. this has happened: senior faculty pass by quickly, you want
-      to show them a demo, but you have to deal with your laptop. This is an
-      autonomous vehicle. It shouldn't need a laptop. Thus, we must do
-      everything with just a joystick
+This is clearly a worst-case scenario. It is not the only scenario. A well-planned demo for a barely-technical audience would demand questions such as "Why do you need a laptop, if this is an autonomous vehicle?" or "Is the code running on the robot, or your computer?" And in any case, a laptop and the corresponding WiFi network necessary is yet another potential point of failure. A laptop should not be necessary in order to begin an autnonmous routine on the duckiebot. This 6.UAP project remedies this. 
 \section{Requirements and Design Goals}
-- Start a program of the student or researcher's choosing without using a
-  separate computer to launch it. 
-- contained within duckiebot; no laptop interaction.
-- reliable. This cannot fail when you're in front of an audience. 
-- easy and fast to use. Students shouldn't have a hard time interfacing with
-  this, or have to push more buttons than either rosrun method. 
-- future-proof. This was not an initial need, but instead grew as a
-  requirement as the implementation options' lifespans were reviewed. 
+The purpose of this project is to create a quick and easy means to start any ROS program on the duckiebot. There is a clear primary requirement: this system must let the user (researcher or student) start a program of their choosing on the duckiebot without using any device external to the duckiebot. The duckiebot has two inputs that may be considered: a Raspberry Pi Cam 2, and a Logitech Joystick controler. 
+
+Three goals guided the fulfillment of this requirement. The system must be reliable. It cannot fail when the user is in front of an audience. It must be easy to use and require as little interaction as is possible. Users shouldn't have a hard time interfacing with it, or have to push more buttons than either rosrun method. Lastly, this implementation must be future-proof \textit{(is there a more formal word? )}. The duckietown software will soon have to migrate to a different version of ROS and Ubuntu. The utilities produced by this project must be usable even as ROS and Ubuntu change. 
 \section{Existing technologies used here}
-- js\_linux.py
-- init.d/linux
-- supervisord
+\subsubsection{apt-get isntall joystick; }
+\subsubsection{jstest; }
+\subsubsection{js\_linux.py/python code from github}
+\subsubsection{init.d/linux}
+\subsubsection{supervisord}
 \section{Implementation}
-Joystick Daemon
-  - apt-get isntall joystick; jstest; python app from github
-  - joystick-daemon.py; startuptest
-- Starting up the joystick daemon
-  - (runlevels, if need more padding)
-  - init.d
-  - rc.local
-  - supervisord
+% the subsubsection will be the individual files / indivisible components. 
+\subsection{Joystick Daemon}
+\subsubsection{joystick-daemon.py; startuptest}
+\subsubsection{start-response.sh}
+\subsection{Reliable startup script} % could be renamed? 
+% \subsubsection{(runlevels, if need more padding)}
+\subsubsection{init.d}
+\subsubsection{rc.local}
+\subsubsection{supervisord}
 \section{Conclusions and Future work}
+CONCLUSIONS
 - results
 - yo. it ran like 10 times in a row, successfully. It be good.
 - It shouldn't have taken this long. It's not worth figuring out why
   rc.local didn't work, though. Who knows why.
+FUTURE WORK. 
 - Make it prettier. 
 - Make it more user friendly. 
+- we use ROS, arguably the most popular robotics middleware around. That didn't matter much at all for this project. This entire system could be used for a system running on MOOS, used by LAMSS, or LCM, used by the Robot Locomotion group. So long as a joystick is being used as input, the only file that would change would be start-response.sh.
+\subsection{Acknowledgements}
+\begin{itemize}
+\item John Leonard, CEO(???) of Duckietown Engineering Co., for generously advising this and many others of my works
+\item Liam Paull, COO of Duckietown Engineering Co., for advising me directly and patiently
+\item Alex Chernovsky, of SIPB, for recommending supervisord
+\item Anders, of pika, for giving me advice, though I forgot that advice
+\item that person from office of EECS undergrads, for helping me get an incomplete when jleonard was busy
+\item Kelly Shen, for planning advice, writing examples, and prayers. 
+\end{itemize}
+
+\subsection{References}
 
 \end{document}
 
