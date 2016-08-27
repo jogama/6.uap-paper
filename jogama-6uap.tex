@@ -90,14 +90,15 @@ This is clearly a worst-case scenario. It is not the only scenario. A well-plann
 The purpose of this project is to create a quick and easy means to start any ROS program on the duckiebot. There is a clear primary requirement: this system must let the user (researcher or student) start a program of their choosing on the duckiebot without using any device external to the duckiebot. The duckiebot has two inputs that may be considered: a Raspberry Pi Cam 2, and a Logitech Joystick controler. 
 
 Three goals guided the fulfillment of this requirement. The system must be reliable. It cannot fail when the user is in front of an audience. It must be easy to use and require as little interaction as is possible. Users shouldn't have a hard time interfacing with it, or have to push more buttons than either rosrun method. Lastly, this implementation must be future-proof \textit{(is there a more formal word? )}. The duckietown software will soon have to migrate to a different version of ROS and Ubuntu. The utilities produced by this project must be usable even as ROS and Ubuntu change. 
-\section{Existing technologies used here}
+\section{Existing technologies used here} 
+\textbf{code/shell should definitely be moved from this section to the next} \\
 We \textit{<--pl person?} must start a program at an unexpected time. Using input directly to the Raspberry Pi. We use its joystick. Input from the joystick must always be monitored. This monitor, this daemon, must start up on the duckiebot by itself. 
 
 To interface with the joystick, we included this python module from github. 
 init.d initializes EVERYTHING on Ubuntu 14.04. But it's been marked for death.
 Supervisord is a python package that can also initialize thingies, and is actively developed by \textbf{\textit{x qntty of devs on gith}}
 We explain these further now. 
-\subsubsection{js_linux.py}
+\subsubsection{js\_linux.py}
 Nearly everything is a file in UNIX. This includes inputs from the joystick. They are written to a file \texttt{/dev/input/js0}, which is opened and read as such in python:
 
 % snippet showing read block from code
@@ -109,15 +110,18 @@ Nearly everything is a file in UNIX. This includes inputs from the joystick. The
   jsdev = open(fn, 'rb')
 \end{lstlisting}
 
-This snippet is from js_linux.py. This one-file script interacts is based off of the standard linux c interface. Using C would have narrowed greatly how many people can improve this code, so python here we go. 
+This snippet is from js\_linux.py. This one-file script interacts is based off of the standard linux c interface. Using C would have narrowed greatly how many people can improve this code, so python here we go. 
 
 Plus, we got this code from github. For free!
+
 \subsubsection{System V}
+Linux initializes. We use SystemV. SystemV (and upstart) will soon die, so we use supervisord instead. 
+
 When the duckiebot is powered on, it must begin listening for joystick commands. This background listening program, this daemon, must be launched on system startup. Ubuntu 14. 04 supports two initialization (init) systems, called by the Linux kernel to start every other process necessary to run the operating system. They are Upstart \textit{textbf{cite something}} and System V (sysv). The directories /etc/init and /etc/init.d correspond to either, respectively. Both init systems have been marked for death. Their replacement, systemd, is not readily available for Ubuntu 14.04. This poses a problem for any future-proof implementation. but they could not be avoided. We proceeded with sysv, as it has much greater support than upstart. 
 
 We briefly explain sysv's interface. (/etc/init.d/README) (/etc/init.d/skeleton).  skeleton is 160 lines. 
 This is pretty much all we use:
- 
+
 \begin{lstlisting}
   # PATH should only include /usr/* if it runs after the mountnfs.sh script
   PATH=/sbin:/usr/sbin:/bin:/usr/bin
@@ -132,9 +136,23 @@ This is pretty much all we use:
   [ -x "$DAEMON" ] || exit 0
 \end{lstlisting}
 
-This init script is used to start supervisord. We use supervisord version 3, installed via pip \textbf{textit{are you sure about that?}} because it is not in the 
+This init script does not start the listening program. It is used to start supervisord. 
 \subsubsection{supervisord}
 
+We use supervisord version 3 as it allows us to run processes as a specific user. It is unclear how this would be done in init scripts. We installed it via pip \textbf{textit{are you sure about that?}}because the Ubuntu 14.04 package repositories only contains older versions. This feature is crucial, and is not available in older versions. 
+
+Installing via pip rather than apt-get required us to make an init script for it. This is not required in newer versions of Ubuntu. I consider it ``future-proof.''
+
+Supervisord is configured in the \texttt{/etc/supervisor/supervisor.conf} file:
+
+\begin{lstlisting}
+  [program:joystickd]
+  command=/usr/bin/python /home/ubuntu/.duckietown/joystick-daemon/joystick-daemon.py >> /home/ubuntu/.duckietown/joystick-daemon/
+  umask=022
+  user=ubuntu
+\end{lstlisting}
+
+Thus, it succeeds in initializing the python listening script.
 \section{Implementation}
 % the subsubsection will be the individual files / indivisible components. 
 \subsection{Joystick Daemon}
@@ -156,6 +174,7 @@ FUTURE WORK.
 - once we switch to ubuntu 16.04, we should try to remove the dependency of supervisord. It's just not a good idea to depend on another thing. For now, it is a bridge to smooth such a transition. 
 - Make it more user friendly. 
 - we use ROS, arguably the most popular robotics middleware around. That didn't matter much at all for this project. This entire system could be used for a system running on MOOS, used by LAMSS, or LCM, used by the Robot Locomotion group. So long as a joystick is being used as input, the only file that would change would be start-response.sh.
+- consider using sysv init. I did not consider it at all. However, supervisord is a very large dependency; an oversized cludgeon for the little nail of a problem we have. Considerations: What are the differences between 14.04 init and 16.04 init? 
 \subsection{Acknowledgements}
 \begin{itemize}
 \item John Leonard, CEO(???) of Duckietown Engineering Co., for generously advising this and many others of my works
