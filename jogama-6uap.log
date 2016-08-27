@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.27)  23 AUG 2016 14:40
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.27)  26 AUG 2016 19:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -415,21 +415,24 @@ File: pgfmodulematrix.code.tex 2010/08/24  (rcs-revision 1.4)
 (/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopat
 hs.code.tex
 File: tikzlibrarytopaths.code.tex 2008/06/17 v2.10 (rcs-revision 1.2)
-))) (./jogama-6uap.aux)
+))) (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+(./jogama-6uap.aux)
 \openout1 = `jogama-6uap.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -529,74 +532,79 @@ File: lstlang1.sty 2013/08/26 1.5b listings language file
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2013/08/26 1.5b listings language file
-)
-(./jogama-6uap.toc)
+) [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./jogama-6uap.toc)
 \tf@toc=\write4
 \openout4 = `jogama-6uap.toc'.
 
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (10.3845pt too wide) in paragraph at lines 55--56
+ [1]
+Overfull \hbox (10.3845pt too wide) in paragraph at lines 62--63
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (16.38457pt too wide) in paragraph at lines 60--61
+Overfull \hbox (16.38457pt too wide) in paragraph at lines 67--68
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (4.38445pt too wide) in paragraph at lines 61--62
+Overfull \hbox (4.38445pt too wide) in paragraph at lines 68--69
 [][][][][][][][][][][][][][][][][][][][][][][][][][][]
  []
 
-
-Overfull \hbox (76.38518pt too wide) in paragraph at lines 71--72
+[2]
+Overfull \hbox (76.38518pt too wide) in paragraph at lines 78--79
 [][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (736.39189pt too wide) in paragraph at lines 74--76
+Overfull \hbox (736.39189pt too wide) in paragraph at lines 81--83
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (142.38585pt too wide) in paragraph at lines 77--78
+Overfull \hbox (142.38585pt too wide) in paragraph at lines 84--85
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[2]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 111.
+[3]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 107.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 107.
+
+Overfull \hbox (4.38445pt too wide) in paragraph at lines 107--108
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 111.
- [3]
-(./jogama-6uap.aux) ) 
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 117.
+[4] [5] [6] (./jogama-6uap.aux) ) 
 Here is how much of TeX's memory you used:
- 12265 strings out of 495028
- 219890 string characters out of 6181497
- 315396 words of memory out of 5000000
- 15231 multiletter control sequences out of 15000+600000
+ 12320 strings out of 495028
+ 220738 string characters out of 6181497
+ 302617 words of memory out of 5000000
+ 15282 multiletter control sequences out of 15000+600000
  9728 words of font info for 35 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 56i,6n,55p,633b,954s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-bx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on jogama-6uap.pdf (3 pages, 115705 bytes).
+ 56i,6n,55p,633b,1481s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmbxti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on jogama-6uap.pdf (7 pages, 125105 bytes).
 PDF statistics:
- 49 PDF objects out of 1000 (max. 8388607)
- 35 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
