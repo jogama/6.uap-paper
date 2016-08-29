@@ -98,7 +98,7 @@ To interface with the joystick, we included this python module from github.
 init.d initializes EVERYTHING on Ubuntu 14.04. But it's been marked for death.
 Supervisord is a python package that can also initialize thingies, and is actively developed by \textbf{\textit{x qntty of devs on gith}}
 We explain these further now. 
-\subsubsection{js\_linux.py}
+\subsection{js\_linux.py}
 Nearly everything is a file in UNIX. This includes inputs from the joystick. They are written to a file \texttt{/dev/input/js0}, which is opened and read as such in python:
 
 % snippet showing read block from code
@@ -114,36 +114,84 @@ This snippet is from js\_linux.py. This one-file script interacts is based off o
 
 Plus, we got this code from github. For free!
 
-\subsubsection{System V}
+\subsection{System V}
 Linux initializes. We use SystemV. SystemV (and upstart) will soon die, so we use supervisord instead. 
 
 When the duckiebot is powered on, it must begin listening for joystick commands. This background listening program, this daemon, must be launched on system startup. Ubuntu 14. 04 supports two initialization (init) systems, called by the Linux kernel to start every other process necessary to run the operating system. They are Upstart \textit{textbf{cite something}} and System V (sysv). The directories /etc/init and /etc/init.d correspond to either, respectively. Both init systems have been marked for death. Their replacement, systemd, is not readily available for Ubuntu 14.04. This poses a problem for any future-proof implementation. but they could not be avoided. We proceeded with sysv, as it has much greater support than upstart. 
 
-We briefly explain sysv's interface. (/etc/init.d/README) (/etc/init.d/skeleton).  skeleton is 160 lines. 
-This is pretty much all we use:
-
-\begin{lstlisting}
-  # PATH should only include /usr/* if it runs after the mountnfs.sh script
-  PATH=/sbin:/usr/sbin:/bin:/usr/bin
-  DESC="Description of the service"
-  NAME=daemonexecutablename
-  DAEMON=/usr/sbin/$NAME
-  DAEMON_ARGS="--options args"
-  PIDFILE=/var/run/$NAME.pid
-  SCRIPTNAME=/etc/init.d/$NAME
- 
-  # Exit if the package is not installed
-  [ -x "$DAEMON" ] || exit 0
-\end{lstlisting}
 
 This init script does not start the listening program. It is used to start supervisord. 
-\subsubsection{supervisord}
+\subsection{supervisord}
 
 We use supervisord version 3 as it allows us to run processes as a specific user. It is unclear how this would be done in init scripts. We installed it via pip \textbf{textit{are you sure about that?}}because the Ubuntu 14.04 package repositories only contains older versions. This feature is crucial, and is not available in older versions. 
 
 Installing via pip rather than apt-get required us to make an init script for it. This is not required in newer versions of Ubuntu. I consider it ``future-proof.''
 
-Supervisord is configured in the \texttt{/etc/supervisor/supervisor.conf} file:
+Supervisord is configured in the \texttt{/etc/supervisor/supervisor.conf} file.
+\section{Implementation}
+% the subsection will be the individual files / indivisible components. 
+\subsection{Joystick Daemon}
+The joystick daemon consists of three parts: js\_linux.py, joystick-daemon.py, and bash scripts corresponding to the buttons on the joystick.  
+\subsubsection{joystick-daemon.py}
+We have modified js\_linux.py for joystick-daemon.py to import it as a module. joystick-daemon.py runs an infinite loop based off of the example in js\_linux.py. Each iteration, it records a translated portion of the joystick input written to /dev/input/js0. This portion is one event from the joystick. If the event is a button press, it checks which button was pressed and calls the shell script corresponding to this buffer. For example, if the start button is pressed, joystick-daemon.py will call start-response.sh.
+\subsubsection{start-response.sh}
+This shell script is called by joystick-daemon.py whenever the start button is pressed. In order to run a ROS program, one usually performs the following invocation while logged into the duckiebot:
+
+\begin{lstlisting}
+  source /home/ubuntu/duckietown/environment.sh;
+  source /home/ubuntu/duckietown/set_ros_master.sh;
+  roslaunch duckietown joystick.launch veh:=cepillo;
+\end{lstlisting}
+
+The first two lines set up ROS to be used, and the third finally launches the desired program. 
+In this case, the program launched is a joystick demo for driving the duckiebot around with a joystick. 
+On all duckiebots the entire duckietown software stack is located at /home/ubuntu/duckietown, where 'ubuntu' is the username for all duckiebots. 
+
+Since the software is located and set up for this user, it must be run as this user. Numerous attempts were made to run joystick.launch as the root user, to no avail. 
+\subsection{Reliable startup script} % could be renamed? 
+% \subsubsection{(runlevels, if need more padding)}
+The startup script has two requirements: launch joystick-daemon.py when the duckiebot powered on, and launch joystick-daemon.py as the user 'ubuntu.'
+\subsubsection{rc.local}
+The go-to method of running any startup script in ubuntu is by calling a script in rc.local \textbf{\textit{cite stackoverflow, askraspi to show that this is the go-to method of running a startup script}}. This requires only one line of bash. This was the initial method of implementing the startup script. 
+
+It failed. rc.local runs the programs it calls as the root user. We circumvented it by doing 
+\begin{lstlisting}
+  su ubuntu -c "python /home/ubuntu/.duckietown/joystick-daemon/joystick-daemon.py >> /home/ubuntu/.duckietown/joystick-daemon/log-python-output" &                                                                   
+\end{lstlisting}
+
+The \texttt{su} command lets run a command as another user. In this case, su is called by root to run python as ubuntu. 
+This successfully called the startup script at about 50\% of all boot sequences. 
+We were not able to find out why it failed half the time, so we investigated other methods.
+
+\subsubsection{init.d}
+Creating a sysv init script would be the easiest and cleanest means to startup the joystick daemon.CONCLUSIONS
+We attempted to create a sysv init script /etc/init.d/duckietown\_joystickd. 
+It did not function. The details surrounding its failure are well lost. 
+So we went to supervisord.
+
+Ideally, a sysv init script would be made that calls joystick-daemon.py directly, rather than calling supervisord as we do now. 
+
+I pulled an example sysv init script for supervisord from somewhere on the internet, tweaked, it, and it worked /// We briefly explain sysv's interface. (/etc/init.d/README) (/etc/init.d/skeleton).  skeleton is 160 lines. 
+This is pretty much all we use:
+
+
+\begin{lstlisting}
+  # Short-Description: Start/stop supervisor
+  # Description:       Start/stop supervisor daemon and its configured
+  #                    subprocesses.
+  ### END INIT INFO
+  
+  . /lib/lsb/init-functions
+  
+  PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+  DAEMON=/usr/local/bin/supervisord
+  NAME=supervisord
+  DESC=supervisor
+\end{lstlisting}
+\subsubsection{supervisord}
+Supervisord was an unfortunate addition to the system, but it works smoothly. 
+It started when its init script is run by the init system. 
+Supervisord in turn calls joystick-daemon.py in a program block within the configuration file /etc/supervisor/supervisor.conf:
 
 \begin{lstlisting}
   [program:joystickd]
@@ -153,28 +201,20 @@ Supervisord is configured in the \texttt{/etc/supervisor/supervisor.conf} file:
 \end{lstlisting}
 
 Thus, it succeeds in initializing the python listening script.
-\section{Implementation}
-% the subsubsection will be the individual files / indivisible components. 
-\subsection{Joystick Daemon}
-\subsubsection{joystick-daemon.py; startuptest}
-\subsubsection{start-response.sh}
-\subsection{Reliable startup script} % could be renamed? 
-% \subsubsection{(runlevels, if need more padding)}
-\subsubsection{init.d}
-\subsubsection{rc.local}
-\subsubsection{supervisord}
+
 \section{Conclusions and Future work}
-CONCLUSIONS
-- results
-- yo. it ran like 10 times in a row, successfully. It be good.
-- It shouldn't have taken this long. It's not worth figuring out why
-  rc.local didn't work, though. Who knows why.
-FUTURE WORK. 
-- Make it prettier. 
-- once we switch to ubuntu 16.04, we should try to remove the dependency of supervisord. It's just not a good idea to depend on another thing. For now, it is a bridge to smooth such a transition. 
-- Make it more user friendly. 
-- we use ROS, arguably the most popular robotics middleware around. That didn't matter much at all for this project. This entire system could be used for a system running on MOOS, used by LAMSS, or LCM, used by the Robot Locomotion group. So long as a joystick is being used as input, the only file that would change would be start-response.sh.
-- consider using sysv init. I did not consider it at all. However, supervisord is a very large dependency; an oversized cludgeon for the little nail of a problem we have. Considerations: What are the differences between 14.04 init and 16.04 init? 
+The base goal of a reliable, future-proof interface was tested by cutting and reestablishing power to the duckiebot ten times and pressing the start button on the joystick to launch the joystick demo. Running the joystick demo lets the user drive the duckiebot using the joystick. Each time, pressing the start button and waiting about fifteen seconds let the user drive the duckiebot with the joystick. The program started 10/10 times. 
+
+It should not have taken this long to do this project. Had rc.local been reliable, this likely would have been finished in may. Unfortunately, no. 
+
+we use ROS, arguably the most popular robotics middleware around. That didn't matter much at all for this project. This entire system could be used for a system running on MOOS, used by LAMSS, or LCM, used by the Robot Locomotion group. So long as a joystick is being used as input, the only file that would change would be start-response.sh.
+
+\textbf{Future Work:} \\
+consider using sysv init. I did not consider it at all. However, supervisord is a very large dependency; an oversized cludgeon for the little nail of a problem we have. Considerations: What are the differences between 14.04 init and 16.04 init? 
+
+The dependency of supervisord must be removed. The latest this should happen is when Duckietown switches to Ubuntu 16.04. 
+
+It should be more user friendly.  
 \subsection{Acknowledgements}
 \begin{itemize}
 \item John Leonard, CEO(???) of Duckietown Engineering Co., for generously advising this and many others of my works
@@ -195,4 +235,5 @@ FUTURE WORK.
 
 
 
-%  LocalWords:  systemd sysv
+%  LocalWords:  systemd sysv py Supervisord supervisord init linux js
+%  LocalWords:  rc startup dev duckiebot
