@@ -49,71 +49,70 @@
 \pagebreak
 
 \section{Background } 
-Duckietown (2.166) is a graduate class on advanced autonomy taught at MIT, first taught in Spring 2016. It is a hands-on, project-focused course focusing on self-driving vehicles and high-level autonomy. Its students work to solve the underlying problem of designing the Autonomous Robo-Taxis System for the (fictional) City of Duckietown. Its students are diverse, coming from multiple departments with different backgrounds. 
-\\
-With this diversity in mind, the first week \textit{\textbf{or two}} is dedicated to bringing everyone on the same page, and doling out the robo-taxis to be programmed: Duckiebots. A Raspberry Pi 2 is at the center of these machines \textit{(cite duck site)}. To program them, students learn to log in remotely from their laptops to the robot's Pi and launch programs the same way, or by sending a command directly from their laptops without logging into their robot. The students had no way of running a program on their duckiebots without using their laptops.
-\\
-Picture this scenario. A grad student is testing some new autonomy on their laptop. Their reseach advisor \textit{(is this the right word?)} happens to walk by on her way to a meeting and asks him ``how's your duckiebot doing?'' The student rushes to power on his robot taxi (named batmobile), wait for it to connect to the network, and rushes the following incantation into his laptop's terminal: \textit{(change 'dat-grad-student' to 'you'?)}
+Duckietown (2.166) is a graduate class on advanced autonomy taught at MIT. It was first taught Spring 2016. It is a hands-on, project-based course focusing on self-driving vehicles and high-level autonomy. Its students work to solve the underlying problem of designing the Autonomous Robo-Taxis System for the (fictional) City of Duckietown. Its students are diverse, coming from multiple departments and with different backgrounds. 
+
+With this diversity in mind, the first two weeks were dedicated to bringing everyone on the same page, and doling out the robo-taxis to be programmed: Duckiebots. 
+    % https://docs.google.com/spreadsheets/d/1J3v3r8-toORWZah-Jqx9yEVezRbwidOiNvwpNcgwn88/edit#gid=0
+A Raspberry Pi 2 
+    % https://docs.google.com/spreadsheets/d/1eo5y87Vsk4pxF34WwPCUREBlYLa7RavoKfP14SQLaHU/edit#gid=0
+    % inventory link
+is at the center of these machines. To program them, students learn to log in remotely from their laptops to the robot's Pi and launch programs the same way, or by sending a command directly from their laptops without logging into their robot. The students have no way of running a program on their duckiebots without using their laptops.
+
+Picture this scenario. A grad student is testing a new autonomy on his laptop. His research advisor happens to walk by on her way to a meeting and asks him ``how's your duckiebot doing?'' The student hurries excitedly to power on his robot taxi (named batmobile), waits for it to connect to the network, and rushes the following incantation into his laptop's terminal:
+% change 'dat-grad-student' to 'you'?
 
 % ah thank ye Jesus for waking me up at 0614 here in NH,
 % letting me exercises, bathe go to morning prayer, pray a little more, and then making time for me to write her. Te lo agradezco, sinceramente. 
-\begin{lstlisting}
+\begin{verbatim}
   dat-grad-student@duckietop4:~$ ssh batmobile
   ssh: Could not resolve hostname batmobile.local: Name or service not known
   dat-grad-student@duckietop4:~$ ping batmobile.local
   ping: unknown host batmobile.local
   dat-grad-student@duckietop4:~$ ping batmobile.local
-  PING batmobile.local (18.314.159.265)
-  64 bytes from localhost (18.314.159.265): icmp_seq=1 ttl=64 time=396.039 ms
-  64 bytes from localhost (18.314.159.265): icmp_seq=2 ttl=64 time=F I X   T  H E S E   N U M B E R S
+  PING cepillo.local (10.42.0.62) 56(84) bytes of data.
+  64 bytes from 10.42.0.62: icmp_seq=1 ttl=64 time=1.02 ms
+  64 bytes from 10.42.0.62: icmp_seq=2 ttl=64 time=0.971 ms
   ^C
-  --- localhost ping statistics ---
-  4 packets transmitted, 4 received, 0% packet loss, time 2999ms
-  rtt min/avg/max/mdev = 0.022/0.029/0.039/0.008 ms
+  --- batmoble.local ping statistics ---
+  2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+  rtt min/avg/max/mdev = 0.971/1.000/1.029/0.029 ms
+  dat-grad-student@duckietop4:~$ ^C
   dat-grad-student@duckietop4:~$ ssh batmobile
-  .
-  .
-  .
-  # F I L L   T H E   R E S T   O F   T H I S
   ubuntu@batmobile:~$ roslaunch duckietown dat-grad-students-demo.launch  veh:=batmobile
- \end{lstlisting}
- \begin{lstlisting}
-  or he does the other thing where he still has to ssh in but still sees all  the above errors that come up whenever you're not thinking straight,  running commands you're just getting familiar with. 
- 
-  you know, the remote roslaunch
-  dad-grad-student@duckietop4:~$ roslaunch duckietown
-  dat-grad-students-demo.launch veh:=batmobile
-\end{lstlisting}
+ \end{verbatim}
 
-This is clearly a worst-case scenario. It is not the only scenario. A well-planned demo for a barely-technical audience would demand questions such as "Why do you need a laptop, if this is an autonomous vehicle?" or "Is the code running on the robot, or your computer?" And in any case, a laptop and the corresponding WiFi network necessary is yet another potential point of failure. A laptop should not be necessary in order to begin an autnonmous routine on the duckiebot. This 6.UAP project remedies this. 
+First, \texttt{ssh batmobile} is run to log into the duckiebot named batmobile. Failing that, the student \texttt{ping}s his robot to see if it is on the network. On the second ping attempt, batmobile has completed enough of its bootup sequence to respond to pings. The student \texttt{ssh}'s into batmobile and launches his demo. But by this time, his advisor has already walked on to her meeting. 
+
+This is clearly a worst-case scenario. It is not the only scenario.
+% rephrase previous sentence. Don't repeat 'scenario'.
+A well-planned demo for a barely-technical audience would demand questions such as "Why do you need a laptop, if this is an autonomous vehicle?" or "Is the code running on the robot, or your computer?" A laptop and the corresponding WiFi network necessary are other potential points of failure. Trying to demonstrate your robot in a lab with twenty other duckiebots clogging the same 2.4GHz channel can lead to frustrations best kept outside of the scope of 2.166. A laptop should not be necessary in order to begin an autonomous routine on the duckiebot. This 6.UAP project remedies this. 
 \section{Requirements and Design Goals}
-The purpose of this project is to create a quick and easy means to start any ROS program on the duckiebot. There is a clear primary requirement: this system must let the user (researcher or student) start a program of their choosing on the duckiebot without using any device external to the duckiebot. The duckiebot has two inputs that may be considered: a Raspberry Pi Cam 2, and a Logitech Joystick controler. 
+The purpose of this project is to create a quick and easy means to start any ROS program on the duckiebot. There is a clear primary requirement: this system must let the user (researcher or student) start a program of their choosing on the duckiebot without using a computer offboard the robot. Its Raspberry Pi has two inputs that may be considered: a Raspberry Pi Cam 2, and a Logitech Gamepad F710 joystick controller. The computer itself runs Ubuntu 14.04.
 
-Three goals guided the fulfillment of this requirement. The system must be reliable. It cannot fail when the user is in front of an audience. It must be easy to use and require as little interaction as is possible. Users shouldn't have a hard time interfacing with it, or have to push more buttons than either rosrun method. Lastly, this implementation must be future-proof \textit{(is there a more formal word? )}. The duckietown software will soon have to migrate to a different version of ROS and Ubuntu. The utilities produced by this project must be usable even as ROS and Ubuntu change. 
+Three goals guided the fulfillment of this requirement. The system must be reliable. It cannot fail when the user is in front of an audience. It must be easy to use and require as little interaction as is possible. Users shouldn't have a hard time interfacing with it, or have to push more buttons than when they type in roslaunch.
+% awkward wording
+Lastly, this implementation must be future-proof. The duckietown software will migrate to  different versions of ROS and Ubuntu. The utilities produced by this project must be usable even as ROS and Ubuntu change. 
 \section{Existing technologies used here} 
-\textbf{code/shell should definitely be moved from this section to the next} \\
-We \textit{<--pl person?} must start a program at an unexpected time. Using input directly to the Raspberry Pi. We use its joystick. Input from the joystick must always be monitored. This monitor, this daemon, must start up on the duckiebot by itself. 
+% code/shell should definitely be moved from this section to the next
+We must start a program at an unexpected time. Using input directly to the Raspberry Pi. We use its joystick. Input from the joystick must always be monitored. This monitor, this daemon, must start up on the duckiebot by itself. 
 
 To interface with the joystick, we included this python module from github. 
-init.d initializes EVERYTHING on Ubuntu 14.04. But it's been marked for death.
-Supervisord is a python package that can also initialize thingies, and is actively developed by \textbf{\textit{x qntty of devs on gith}}
+The initialization system initializes every process that runs on Ubuntu, directly or indirectly. But both used by Ubuntu 14.04 have been marked for death.
+Supervisord is a python package that can also initialize and manage processes. It is actively developed by \textbf{\textit{x qntty of devs on gith}}
 We explain these further now. 
 \subsection{js\_linux.py}
-Nearly everything is a file in UNIX. This includes inputs from the joystick. They are written to a file \texttt{/dev/input/js0}, which is opened and read as such in python:
-
-% snippet showing read block from code
+Nearly everything is a file in a UNIX operating system such as Ubuntu. This includes inputs from the joystick. When a button is pressed or a joystick is tilted, the events are written to a file \texttt{/dev/input/js0}. We use python to directly open and read this file:
 
 \begin{lstlisting}
   # Open the joystick device.
-  fn = '/dev/input/js0'
+  fn = '/dev/input/js0' 
   print('Opening %s...' % fn)
   jsdev = open(fn, 'rb')
 \end{lstlisting}
 
-This snippet is from js\_linux.py. This one-file script interacts is based off of the standard linux c interface. Using C would have narrowed greatly how many people can improve this code, so python here we go. 
+This snippet is from js\_linux.py [1]. This script reads and also parses this. When run, it prints to the terminal what buttons are being pressed and how much a joystick's axis is being tilted. We modify js\_linux.py in order to import it as a module. 
 
-Plus, we got this code from github. For free!
-
+This script is based on the more standard C api for reading events written by the joystick device. The python script was chosen over the C api so that more people would be able to understand how these modules work, and modify them if they see it necessary. More MIT students are familiar with python than with C, especially when one considers undergraduate students.
 \subsection{System V}
 Linux initializes. We use SystemV. SystemV (and upstart) will soon die, so we use supervisord instead. 
 
@@ -227,8 +226,9 @@ It should be more user friendly.
 
 \subsection{References}
 \begin{enumerate}[(1)]
-\item https://www.kernel.org/doc/Documentation/input/joystick-api.txt
-\item rdb had a nice gist on github.com
+\item rdb had a nice gist on github.com https://gist.github.com/rdb/8864666
+\item original C api for the joystick https://www.kernel.org/doc/Documentation/input/joystick-api.txt
+
 \end{enumerate}
 
 \end{document}

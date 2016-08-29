@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.27)  29 AUG 2016 01:17
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.4.27)  29 AUG 2016 15:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -539,85 +539,65 @@ File: lstlang1.sty 2013/08/26 1.5b listings language file
 \openout4 = `jogama-6uap.toc'.
 
  [1]
-Overfull \hbox (22.38463pt too wide) in paragraph at lines 62--63
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+Overfull \hbox (28.37596pt too wide) in paragraph at lines 82--82
+[]  \OT1/cmtt/m/n/10 ubuntu@batmobile:~$ roslaunch duckietown dat-grad-students
+-demo.launch  veh:=batmobile[] 
  []
 
-
-Overfull \hbox (28.38469pt too wide) in paragraph at lines 67--68
-[][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (16.38457pt too wide) in paragraph at lines 68--69
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][]
- []
-
-[2]
-Overfull \hbox (10.3845pt too wide) in paragraph at lines 78--79
-[][][][][][][][][][][][][][][][][][][][][][][]
- []
-
-
-Overfull \hbox (34.38475pt too wide) in paragraph at lines 81--83
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
- []
-
-
-Overfull \hbox (292.38737pt too wide) in paragraph at lines 81--83
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][] 
- []
-
-[3] [4] [5]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 159.
+[2] [3] [4] [5]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 158.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 159.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 158.
 
-Overfull \hbox (448.38896pt too wide) in paragraph at lines 159--160
+Overfull \hbox (448.38896pt too wide) in paragraph at lines 158--159
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][] 
  []
 
 [6]
-Overfull \hbox (346.38792pt too wide) in paragraph at lines 198--199
+Overfull \hbox (346.38792pt too wide) in paragraph at lines 197--198
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][] 
  []
 
 [7]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 220.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 219.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 220.
- [8] [9]
-(./jogama-6uap.aux) ) 
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 219.
+ [8]
+Overfull \hbox (3.74098pt too wide) in paragraph at lines 230--231
+[]\OT1/cmr/m/n/10 original C api for the joy-stick https://www.kernel.org/doc/D
+ocumentation/input/joystick-api.txt 
+ []
+
+[9] (./jogama-6uap.aux) ) 
 Here is how much of TeX's memory you used:
- 12354 strings out of 495028
- 221176 string characters out of 6181497
- 303616 words of memory out of 5000000
- 15312 multiletter control sequences out of 15000+600000
+ 12267 strings out of 495028
+ 220322 string characters out of 6181497
+ 300617 words of memory out of 5000000
+ 15225 multiletter control sequences out of 15000+600000
  9896 words of font info for 36 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 56i,6n,55p,781b,1481s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-bx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on jogama-6uap.pdf (10 pages, 153410 bytes).
+ 56i,6n,55p,781b,1119s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx
+ti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on jogama-6uap.pdf (10 pages, 153818 bytes).
 PDF statistics:
  80 PDF objects out of 1000 (max. 8388607)
  57 compressed objects within 1 object stream
