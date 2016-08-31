@@ -18,7 +18,7 @@
     "amsmath"
     "color"
     "graphicx"
-    "tikz"
+    "wrapfig"
     "setspace"))
  :latex)
 
