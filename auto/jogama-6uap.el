@@ -19,6 +19,11 @@
     "color"
     "graphicx"
     "wrapfig"
-    "setspace"))
+    "setspace")
+   (LaTeX-add-bibitems
+    "rdb"
+    "supervisord"
+    "pypi"
+    "shuttleworth"))
  :latex)
 

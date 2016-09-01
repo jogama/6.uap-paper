@@ -31,9 +31,9 @@
 %     tabsize=2                                                                   
 % }
 
-\title{Untitled}
+\title{Towards an Improved User Interface to Engineering the Robot Taxis of Duckietown}
 \author{Jonathan Garcia-Mallen}
-\date{??? August 2016}
+\date{31 August 2016}
 
 \doublespacing % using package 'setspace'
 
@@ -79,7 +79,8 @@ Picture this scenario. A grad student is testing a new autonomy on his laptop. H
   rtt min/avg/max/mdev = 0.971/1.000/1.029/0.029 ms
   dat-grad-student@duckietop4:~$ ^C
   dat-grad-student@duckietop4:~$ ssh batmobile
-  ubuntu@batmobile:~$ roslaunch duckietown dat-grad-students-demo.launch  veh:=batmobile
+  ubuntu@batmobile:~$ roslaunch duckietown   \
+      dat-grad-students-demo.launch  veh:=batmobile
  \end{verbatim}
 
 First, \texttt{ssh batmobile} is run to log into the duckiebot named batmobile. Failing that, the student \texttt{ping}s his robot to see if it is on the network. On the second ping attempt, batmobile has completed enough of its bootup sequence to respond to pings. The student \texttt{ssh}'s into batmobile and launches his demo. But by this time, his advisor has already walked on to her meeting. 
@@ -111,9 +112,9 @@ Nearly everything is a file in a UNIX operating system such as Ubuntu. This incl
   jsdev = open(fn, 'rb')
 \end{lstlisting}
 
-This snippet is from js\_linux.py [1]. This script reads and also parses this. When run, it prints to the terminal what buttons are being pressed and how much a joystick's axis is being tilted. We modify js\_linux.py in order to import it as a module. 
+This snippet is from js\_linux.py \cite{rdb}. This script reads and also parses this. When run, it prints to the terminal what buttons are being pressed and how much a joystick's axis is being tilted. We modify js\_linux.py in order to import it as a module. 
 
-This script is based on the more standard C api for reading events written by the joystick device. The python script was chosen over the C api so that more people would be able to understand how these modules work, and modify them if they see it necessary. More MIT students are familiar with python than with C, especially when one considers undergraduate students.
+This script is based on the more standard C api for reading events written by the joystick device \cite{linux joystick}. The python script was chosen over the C api so that more people would be able to understand how these modules work, and modify them if they see it necessary. More MIT students are familiar with python than with C, especially when one considers undergraduate students.
 \subsection{System V}
 We want Ubuntu  to start a processes that listens to joystick commands, and we want it to start it when Ubuntu boots up. This background listening program is also called a daemon. 
 
@@ -121,17 +122,17 @@ Starting up Ubuntu is a process. The computer is powered on, the master boot rec
 In Ubuntu 14.04, there are two such initialization processes: upstart and System V (sysv). % cite something
 The directories /etc/init and /etc/init.d correspond to either system, respectively. These directories contain scripts to be started by the init system. Each system has its own syntax for their init scripts. 
 
-Both init systems are in the process of being depreciated. Their replacement, systemd, is not readily available for Ubuntu 14.04. 
+Both init systems are in the process of being depreciated \cite{shuttleworth}. Their replacement, systemd, is not readily available for Ubuntu 14.04. 
 
 We use sysv to indirectly start our joystick daemon. It has much greater support than upstart. To use sysv for stating a program automatically when Ubuntu boots, we write a sysv init script in /etc/init.d.
 
 This init script does not start the listening program. It is used to start supervisord. 
 \subsection{supervisord}
-Supervisor (supervisord) is a process control system [3]. It facilitates monitor and control of processes, and it is meant to start at boot time. It does not replace init, but is called by our init script into action. Upstart and sysv are being depreciated, and supervisord is much easier to interact with than an init script. It is configured via the \texttt{/etc/supervisor/supervisor.conf} configuration file.
+Supervisor (supervisord) is a process control system \cite{supervisord}. It facilitates monitor and control of processes, and it is meant to start at boot time. It does not replace init, but is called by our init script into action. Upstart and sysv are being depreciated, and supervisord is much easier to interact with than an init script. It is configured via the \texttt{/etc/supervisor/supervisor.conf} configuration file.
 
-We use supervisord version 3 as it allows us to run processes as a specific user. How this would be done in init scripts has not been found. This version had to be installed via pip, as the Ubuntu 14.04 package repositories only contain older versions. This feature is crucial, and is not available in older versions. 
+We use supervisord version 3 as it allows us to run processes as a specific user. How this would be done in init scripts has not been found. This version had to be installed via pip \cite{pypi}, as the Ubuntu 14.04 package repositories only contain older versions. This feature is crucial, and is not available in older versions. 
 
-Installing via pip rather than apt-get required us to make an init script for it. This is not required in newer versions of Ubuntu. Unlike a System V init script, Duckietown can continue using Supervisord after transitioning to a newer version of Ubuntu, when the time comes to do so. And as it is developed by dozens [4] of developers, supervisord is a dependency Duckietown can depend on.
+Installing via pip rather than apt-get required us to make an init script for it. This is not required in newer versions of Ubuntu. Unlike a System V init script, Duckietown can continue using Supervisord after transitioning to a newer version of Ubuntu, when the time comes to do so. And as it is developed by dozens \cite{svd devs} of developers, supervisord is a dependency Duckietown can depend on.
 \section{Implementation}
 % the subsection will be the individual files / indivisible components. 
 
@@ -152,18 +153,17 @@ The joystick daemon consists of three parts: js\_linux.py, joystick-daemon.py, a
 \subsubsection{joystick-daemon.py}
 joystick-daemon.py sits in the background running the below abridged infinite loop. It is based off of an example from js\_linux.py. We have modified js\_linux.py by adding \texttt{if \_\_name\_\_ == '\_\_main\_\_':} before its own loop. This way, joystick-daemon.py can import js\_linux.py as a module. Here is our main event loop from joystick-daemon.py:
 \begin{lstlisting}
-    while True:
-        event_buffer = jsdev.read(8)  # jsdev is defined i js_linux.py
-        if event_buffer:
-            time, value, type, number = struct.unpack('IhBB', event_buffer)
-
-        # If the event type is a button press 
-        if type & 0x01:
-            button = button_map[number]  #b button_ma
-            if button:
-                button_states[button] = value
-                if value and button == 'start':
-                    subprocess.call([start-response.sh'])
+  while True:
+      event_buffer = jsdev.read(8)  # jsdev is defined is js_linux.py
+      if event_buffer:
+          time, value, type, number = struct.unpack('IhBB', event_buffer)
+      # If the event type is a button press 
+      if type & 0x01:
+          button = button_map[number]  # button_map is defined in js_linux.py
+          if button:
+              button_states[button] = value
+              if value and button == 'start':
+                  subprocess.call([start-response.sh'])
 \end{lstlisting}
 Each iteration, in lines two and three, we check to see if an event has been written to /dev/input/js0. If the event is a button press, it checks which button was pressed and calls the shell script corresponding to this buffer. For example, if the start button is pressed, joystick-daemon.py will call start-response.sh.
 
@@ -187,9 +187,10 @@ The entire duckietown software is kept in /home/ubuntu/duckietown for every duck
 
 \subsubsection{rc.local}
 The easiest method of running a program on startup in ubuntu is by modifying /etc/rc.local. By default, this script does nothing. It is executed as the root user at certain stages of the startup process. We added a line similar to this the file:
-\begin{lstlisting}
-  su ubuntu -c "python /home/ubuntu/.duckietown/joystick-daemon/joystick-daemon.py >> /dev/null" &                                                            
-\end{lstlisting}
+\begin{verbatim}
+  su ubuntu -c "python    \
+       /home/ubuntu/.duckietown/joystick-daemon/joystick-daemon.py  >> /dev/null" &                                                            
+\end{verbatim}
 
 the \texttt{su} command lets one run commands as a different user. Here, root uses su to run python as user ubuntu. Unfort
 This method successfully called the startup script at about 50\% of all boot sequences. 
@@ -237,36 +238,36 @@ Thus, it succeeds in initializing the python listening script.
 % dat grad wants to run my-super-duper-autonomy.launch whenever he presses the start button. 
 
 \section{Conclusions and Future work}
-The base goal of a reliable, future-proof interface was tested by cutting and reestablishing power to the duckiebot ten times and pressing the start button on the joystick to launch the joystick demo. Running the joystick demo lets the user drive the duckiebot using the joystick. Each time, pressing the start button and waiting about fifteen seconds let the user drive the duckiebot with the joystick. The program started 10/10 times. 
+The base goal of a reliable, future-proof interface was tested by power cycling the duckiebot ten times. The start button on the joystick was pressed to run joystick.launch, a program for driving the duckiebot with the joystick. The duckiebot was shutdown with \texttt{\$ sudo shutdown 0}, not a reboot. Power was removed and replaced. The duckiebot moved, following joystick.launch, each of the ten times. 
 
-It should not have taken this long to do this project. Had rc.local been reliable, this likely would have been finished in may. Unfortunately, no. 
-
-we use ROS, arguably the most popular robotics middleware around. That didn't matter much at all for this project. This entire system could be used for a system running on MOOS, used by LAMSS, or LCM, used by the Robot Locomotion group. So long as a joystick is being used as input, the only file that would change would be start-response.sh.
+The resulting joystick interface is cross-platform. 2.166 Duckietown uses ROS, arguably the most popular robotics middleware available. This mattered little for this project. This entire system could be used for a system running on MOOS-IvP, used by the Marine Robotics group; or LCM, used by the Robot Locomotion group. The only resulting change in the system would be the shell script responding to the button press. 
 
 \textbf{Future Work:} \\
-consider using sysv init. I did not consider it at all. However, supervisord is a very large dependency; an oversized cludgeon for the little nail of a problem we have. Considerations: What are the differences between 14.04 init and 16.04 init? 
+There is much room for improvement with this project. Two would improve the user experience, and a third could make it more dependable. 
+The duckiebot has five RGB LEDs around it. Augmenting joystick-daemon.py such that button presses result in LEDs flashing would provide useful feedback. 
+Writing back-response.sh such that pressing the back button on the joystick quickly kills all ROS process would be a great boon in times when a duckiebot collision seems nigh. 
+Lastly, unless duckietown chooses to move towards a Linux distribution lacking supervisord in its package repositories, it should be discussed whether removing supervisord would benefit duckietown. It is a single and simpler initialization system than sysv, but another dependency is another potential point of failure. Using the operating system's init system may be more reliable. 
 
-The dependency of supervisord must be removed. The latest this should happen is when Duckietown switches to Ubuntu 16.04. 
-
-It should be more user friendly.  
 \subsection{Acknowledgements}
+I owe thanks to many people who helped me in diverse ways on this project. 
 \begin{itemize}
-\item John Leonard, CEO(???) of Duckietown Engineering Co., for generously advising this and many others of my works
-\item Liam Paull, COO of Duckietown Engineering Co., for advising me directly and patiently
-\item Alex Chernovsky, of SIPB, for recommending supervisord
-\item Anders, of pika, for giving me advice, though I forgot that advice
-\item that person from office of EECS undergrads, for helping me get an incomplete when jleonard was busy
-\item Kelly Shen, for planning advice, writing examples, and prayers. 
+\item John Leonard, Director of Research for Duckietown Engineering Co., for generously advising this and many others of my works, and allowing me time beyond the semester to complete this one.
+\item Liam Paull, COO of Duckietown Engineering Co., for advising me directly and patiently throughout my Duckietown experience. 
+\item Anders Erbsen, of pika, for debugging advice as I struggled with processes starting up only half the time.
+\item Alex Chernovsky, of SIPB, for recommending supervisord.
+\item And Kelly Shen, for planning advice, writing examples, and prayers. 
 \end{itemize}
 
 \subsection{References}
-\begin{enumerate}[(1)]
-\item rdb had a nice gist on github.com https://gist.github.com/rdb/8864666
-\item original C api for the joystick https://www.kernel.org/doc/Documentation/input/joystick-api.txt
-\item supervisord exists at http://supervisord.org/
-\item https://github.com/Supervisor/supervisor/graphs/contributors <-- supervisord has devs.
-\item we used pip! https://pypi.python.org/pypi/supervisor/3.3.1
-\end{enumerate}
+\begin{thebibliography}{1}
+% author(s), "Work title", (Date), work type, link.
+\bibitem{rdb} rdb. ``js\_linux.py''. 2014. Github repository: https://gist.github.com/rdb/8864666
+\bibitem{linux joystick} Ragnar Hojland Espinosa. ``Joystick API Documentation''. 1998. Online Documentation: https://www.kernel.org/doc/Documentation/input/joystick-api.txt
+\bibitem{supervisord} Agendaless Consulting and Contributors. ``Supervisor: A Process Control System''. 2016. Web Page: http://supervisord.org/
+\bibitem{svd devs} Github. ``Contributors to Supervisor/supervisor''. 2016. Github page: https://github.com/Supervisor/supervisor/graphs/contributors 
+\bibitem{pypi} Chris McDonough. ``supervisor 3.3.1''. 2016. Package Index page: https://pypi.python.org/pypi/supervisor/3.3.1
+\bibitem{shuttleworth} Mark Shuttleworth ``Loosing graciously''. 2014. Blog post:  http://www.markshuttleworth.com/archives/1316
+\end{thebibliography}
 
 \end{document}
 
