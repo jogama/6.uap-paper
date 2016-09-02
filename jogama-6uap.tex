@@ -54,12 +54,12 @@ Duckietown (2.166) is a graduate class on advanced autonomy taught at MIT. It wa
 
 With this diversity in mind, the first two weeks were dedicated to bringing everyone on the same page, and doling out the robo-taxis to be programmed: Duckiebots. 
     % https://docs.google.com/spreadsheets/d/1J3v3r8-toORWZah-Jqx9yEVezRbwidOiNvwpNcgwn88/edit#gid=0
-A Raspberry Pi 2 
+A Raspberry Pi 2 computer
     % https://docs.google.com/spreadsheets/d/1eo5y87Vsk4pxF34WwPCUREBlYLa7RavoKfP14SQLaHU/edit#gid=0
     % inventory link
 is at the center of these machines. To program them, students learn to log in remotely from their laptops to the robot's Pi and launch programs the same way, or by sending a command directly from their laptops without logging into their robot. The students have no way of running a program on their duckiebots without using their laptops.
 
-Picture this scenario. A grad student is testing a new autonomy on his laptop. His research advisor happens to walk by on her way to a meeting and asks him ``how's your duckiebot doing?'' The student hurries excitedly to power on his robot taxi (named batmobile), waits for it to connect to the network, and rushes the following incantation into his laptop's terminal:
+Picture this scenario. A graduate student is testing a new autonomy on his laptop. His research advisor happens to walk by on her way to a meeting and asks him ``how's your duckiebot doing?'' The student hurries excitedly to power on his robot taxi (named batmobile), waits for it to connect to the network, and rushes the following incantation into his laptop's terminal:
 % change 'dat-grad-student' to 'you'?
 
 % ah thank ye Jesus for waking me up at 0614 here in NH,
@@ -83,13 +83,13 @@ Picture this scenario. A grad student is testing a new autonomy on his laptop. H
       dat-grad-students-demo.launch  veh:=batmobile
  \end{verbatim}
 
-First, \texttt{ssh batmobile} is run to log into the duckiebot named batmobile. Failing that, the student \texttt{ping}s his robot to see if it is on the network. On the second ping attempt, batmobile has completed enough of its bootup sequence to respond to pings. The student \texttt{ssh}'s into batmobile and launches his demo. But by this time, his advisor has already walked on to her meeting. 
+First, \texttt{ssh batmobile} is run to log into the duckiebot named batmobile. Failing that, the student \texttt{ping}s his robot to see if it is on the network. On the second ping attempt, batmobile has completed enough of its bootup sequence to respond to pings. The student ssh's into batmobile and launches his demo. But by this time, his advisor has already walked on to her meeting. 
 
 This is clearly a worst-case scenario. It is not the only scenario.
 % rephrase previous sentence. Don't repeat 'scenario'.
 A well-planned demo for a barely-technical audience would demand questions such as "Why do you need a laptop, if this is an autonomous vehicle?" or "Is the code running on the robot, or your computer?" A laptop and the corresponding WiFi network necessary are other potential points of failure. Trying to demonstrate your robot in a lab with twenty other duckiebots clogging the same 2.4GHz channel can lead to frustrations best kept outside of the scope of 2.166. A laptop should not be necessary in order to begin an autonomous routine on the duckiebot. This 6.UAP project remedies this. 
 \section{Requirements and Design Goals}
-The purpose of this project is to create a quick and easy means to start any ROS program on the duckiebot. There is a clear primary requirement: this system must let the user (researcher or student) start a program of their choosing on the duckiebot without using a computer offboard the robot. Its Raspberry Pi has two inputs that may be considered: a Raspberry Pi Cam 2, and a Logitech Gamepad F710 joystick controller. The computer itself runs Ubuntu 14.04.
+The purpose of this project is to create a quick and easy means to start any Robot Operating System (ROS) program on the duckiebot. There is a clear primary requirement: this system must let the user (researcher or student) start a program of their choosing on the duckiebot without using a computer offboard the robot. Its Raspberry Pi has two inputs that may be considered: a Raspberry Pi Cam 2, and a Logitech Gamepad F710 joystick controller. The computer itself runs Ubuntu 14.04.
 
 Three goals guided the fulfillment of this requirement. The system must be reliable. It cannot fail when the user is in front of an audience. It must be easy to use and require as little interaction as is possible. Users shouldn't have a hard time interfacing with it, or have to push more buttons than when they type in roslaunch.
 % awkward wording
@@ -103,7 +103,7 @@ The initialization system initializes every process that runs on Ubuntu, directl
 Supervisord is a python package that can also initialize and manage processes. It is actively developed by several dozen contributors on github.
 We explain these three subsystems here. 
 \subsection{js\_linux.py}
-Nearly everything is a file in a UNIX operating system such as Ubuntu. This includes inputs from the joystick. When a button is pressed or a joystick is tilted, the events are written to a file \texttt{/dev/input/js0}. We use python to directly open and read this file:
+Nearly everything is a file in a UNIX operating system such as Ubuntu. This includes inputs from the joystick. When a button is pressed or a joystick is tilted, the events are written to a file /dev/input/js0. We use python to directly open and read this file:
 
 \begin{lstlisting}
   # Open the joystick device.
@@ -128,7 +128,7 @@ We use sysv to indirectly start our joystick daemon. It has much greater support
 
 This init script does not start the listening program. It is used to start supervisord. 
 \subsection{supervisord}
-Supervisor (supervisord) is a process control system \cite{supervisord}. It facilitates monitor and control of processes, and it is meant to start at boot time. It does not replace init, but is called by our init script into action. Upstart and sysv are being depreciated, and supervisord is much easier to interact with than an init script. It is configured via the \texttt{/etc/supervisor/supervisor.conf} configuration file.
+Supervisor (supervisord) is a process control system \cite{supervisord}. It facilitates monitor and control of processes, and it is meant to start at boot time. It does not replace init, but is called by our init script into action. Upstart and sysv are being depreciated, and supervisord is much easier to interact with than an init script. It is configured via the /etc/supervisor/supervisor.conf configuration file.
 
 We use supervisord version 3 as it allows us to run processes as a specific user. How this would be done in init scripts has not been found. This version had to be installed via pip \cite{pypi}, as the Ubuntu 14.04 package repositories only contain older versions. This feature is crucial, and is not available in older versions. 
 
@@ -177,7 +177,7 @@ This shell script is called by joystick-daemon.py whenever the start button is p
   roslaunch duckietown new-autonomy.launch veh:=batmobile;
 \end{lstlisting}
 
-The first two lines set up ROS so that it may be used. The third  launches the desired program; here, our grad student's new-autonomy.launch is launched on the vehicle named batmobile.
+The first two lines set up ROS so that it may be used. The third  launches the desired program; here, our graduate student's new-autonomy.launch is launched on the vehicle named batmobile.
 
 \subsection{Launching the Daemon} 
 % \subsubsection{(runlevels, if need more padding)}
@@ -240,11 +240,11 @@ Thus, it succeeds in initializing the python listening script.
 \section{Conclusions and Future work}
 The base goal of a reliable, future-proof interface was tested by power cycling the duckiebot ten times. The start button on the joystick was pressed to run joystick.launch, a program for driving the duckiebot with the joystick. The duckiebot was shutdown with \texttt{\$ sudo shutdown 0}, not a reboot. Power was removed and replaced. The duckiebot moved, following joystick.launch, each of the ten times. 
 
-The resulting joystick interface is cross-platform. 2.166 Duckietown uses ROS, arguably the most popular robotics middleware available. This mattered little for this project. This entire system could be used for a system running on MOOS-IvP, used by the Marine Robotics group; or LCM, used by the Robot Locomotion group. The only resulting change in the system would be the shell script responding to the button press. 
+The resulting joystick interface is cross-platform. 2.166 Duckietown uses ROS, arguably the most popular robotics middleware available. This mattered little for this project. This entire system could be used for a system running on MOOS-IvP, used by the Marine Robotics group; or Lightweight Communications and Marshalling (LCM), used by the Robot Locomotion group. The only resulting change in the system would be the shell script responding to the button press. 
 
 \textbf{Future Work:} \\
 There is much room for improvement with this project. Two would improve the user experience, and a third could make it more dependable. 
-The duckiebot has five RGB LEDs around it. Augmenting joystick-daemon.py such that button presses result in LEDs flashing would provide useful feedback. 
+The duckiebot has five color LEDs around it. Augmenting joystick-daemon.py such that button presses result in the RGB LEDs flashing would provide useful feedback. 
 Writing back-response.sh such that pressing the back button on the joystick quickly kills all ROS process would be a great boon in times when a duckiebot collision seems nigh. 
 Lastly, unless duckietown chooses to move towards a Linux distribution lacking supervisord in its package repositories, it should be discussed whether removing supervisord would benefit duckietown. It is a single and simpler initialization system than sysv, but another dependency is another potential point of failure. Using the operating system's init system may be more reliable. 
 
