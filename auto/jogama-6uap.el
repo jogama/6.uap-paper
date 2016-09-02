@@ -21,9 +21,9 @@
     "wrapfig"
     "setspace")
    (LaTeX-add-bibitems
-    "rdb"
     "supervisord"
     "pypi"
+    "rdb"
     "shuttleworth"))
  :latex)
 
